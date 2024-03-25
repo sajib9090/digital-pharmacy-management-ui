@@ -4,7 +4,7 @@ import { RiShieldCrossLine, RiArrowRightDoubleFill } from "react-icons/ri";
 import { TbCashBanknote } from "react-icons/tb";
 import { IoBagAddOutline } from "react-icons/io5";
 import { BiErrorAlt } from "react-icons/bi";
-import Card from "../Components/Card/Card";
+import Card from "../../Components/Card/Card";
 
 const Dashboard = () => {
   return (

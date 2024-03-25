@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../Components/Card/Card";
+import Card from "../../Components/Card/Card";
 import { IoBagAddOutline } from "react-icons/io5";
 import { BiErrorAlt } from "react-icons/bi";
 
