@@ -98,23 +98,6 @@ const Sidebar = () => {
 
         {/* navigation */}
         <div className="mt-10">
-          {/* <div className="bg-[#1d242e]">
-            <div className="h-[46px] bg-[#283342] hover:bg-[#009099] flex items-center relative">
-              <Link
-                href={"/"}
-                className="flex items-center text-white text-[14px] px-4"
-              >
-                <IoHomeOutline className="h-4 w-4" />
-                <p className="ml-3">Home</p>
-                <MdKeyboardArrowDown className="h-4 w-4 absolute right-4" />
-              </Link>
-            </div>
-            <div className="h-[46px] hover:bg-[#009099] flex items-center">
-              <Link href={"#"} className="text-white text-[14px] pl-11">
-                <p>Sub Home</p>
-              </Link>
-            </div>
-          </div> */}
           {navigationMenu?.map((n, index) => {
             const isActiveSubMenu = activeSubMenu === index;
             const activeLink = pathname == n?.href;
@@ -147,7 +130,9 @@ const Sidebar = () => {
                       <div
                         key={sn?.link}
                         className={`h-[46px] hover:bg-[#009099] flex items-center ${
-                          activeSubLink ? "bg-[#009099]" : ""
+                          activeSubLink || pathname.includes(sn.link)
+                            ? "bg-[#009099]"
+                            : ""
                         }`}
                       >
                         <Link
