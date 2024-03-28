@@ -62,7 +62,7 @@ const ListOfMedicines = () => {
             <th className="w-[8%] text-start">Action</th>
           </tr>
 
-          {Array.from({ length: 9 }).map((d, i) => {
+          {Array.from({ length: 10 }).map((d, i) => {
             return (
               <tr
                 key={i}
@@ -75,7 +75,7 @@ const ListOfMedicines = () => {
                 <td>1111</td>
                 <td>
                   <Link
-                    href={"#"}
+                    href={`/inventory/list-of-medicines/${i}`}
                     className="flex items-center text-[12px] text-blue-600"
                   >
                     View Detail <RiArrowRightDoubleFill />

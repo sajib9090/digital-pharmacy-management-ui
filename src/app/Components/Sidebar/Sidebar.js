@@ -76,7 +76,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-[200px] min-h-screen bg-[#283342] flex flex-col justify-between">
+    <div className="w-[200px] min-h-screen bg-[#283342] flex flex-col justify-between sticky top-0 left-0">
       <div className="h-[60px] bg-[#1d242e] flex items-center justify-center text-white font-bold">
         Pharma One
       </div>

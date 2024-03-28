@@ -7,6 +7,7 @@ import { MdCancel } from "react-icons/md";
 const AddNewMedicineForm = () => {
   const router = useRouter();
 
+
   return (
     <div className="pl-6 pt-2 container1">
       <div className="">
