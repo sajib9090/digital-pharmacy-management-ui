@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { RiArrowRightDoubleFill } from "react-icons/ri";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 const MedicineGroups = () => {
+  const [resultPerPage, setResultPerPage] = useState("10");
+
   return (
     <div className="pl-6 pt-2 container1">
       <div className="flex justify-between">
@@ -15,7 +17,9 @@ const MedicineGroups = () => {
             <Link href={"/inventory"} className="text-gray-400">
               Inventory {">"}{" "}
             </Link>
-            <Link href={"/inventory/medicine-groups"}>Medicine-groups</Link>
+            <Link href={"/inventory/medicine-groups"}>
+              Medicine-groups (111)
+            </Link>
           </div>
           <p className="text-[14px] capitalize">list of medicines groups</p>
         </div>
@@ -47,7 +51,7 @@ const MedicineGroups = () => {
             <th className="w-[10%] text-start">Action</th>
           </tr>
 
-          {Array.from({ length: 9 }).map((d, i) => {
+          {Array.from({ length: resultPerPage }).map((d, i) => {
             return (
               <tr
                 key={i}
@@ -70,7 +74,21 @@ const MedicineGroups = () => {
         </table>
       </div>
 
-      <div className="flex items-center justify-end mt-2">
+      <div className="flex items-center justify-between mt-2 mb-4">
+        <div>
+          <label>Result Per Page :</label>
+          <select
+            value={resultPerPage}
+            onChange={(e) => setResultPerPage(e.target.value)}
+            className="h-[27px] w-[70px] border border-gray-300 rounded ml-2"
+          >
+            {Array.from({ length: 10 }).map((a, i) => (
+              <option key={i} value={i * 10 + 10}>
+                {i * 10 + 10}
+              </option>
+            ))}
+          </select>
+        </div>
         {/* pagination */}
         <div className="flex items-center">
           <span className="h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded cursor-pointer">
