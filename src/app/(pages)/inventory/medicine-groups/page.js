@@ -5,9 +5,33 @@ import { IoIosAdd } from "react-icons/io";
 import { RiArrowRightDoubleFill } from "react-icons/ri";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import axios from "axios";
 
 const MedicineGroups = () => {
   const [resultPerPage, setResultPerPage] = useState("10");
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(data.pagination?.currentPage || 1);
+
+  console.log(page);
+  console.log(data?.pagination?.nextPage);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://digital-pharmacy-management-backend.vercel.app/api/v1/generics/all?shop_name=sajib pharmacy&page=${page}&limit=${resultPerPage}`
+        );
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch data");
+        }
+        setData(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    fetchData();
+  }, [resultPerPage, setData, page]);
 
   return (
     <div className="pl-6 pt-2 container1">
@@ -51,14 +75,19 @@ const MedicineGroups = () => {
             <th className="w-[10%] text-start">Action</th>
           </tr>
 
-          {Array.from({ length: resultPerPage }).map((d, i) => {
+          {data?.data?.map((generic, i) => {
             return (
               <tr
-                key={i}
+                key={generic?._id}
                 className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
               >
-                <td className="pl-4 py-2">{i + 1}</td>
-                <td>Cardiac</td>
+                <td className="pl-4 py-2">
+                  {i +
+                    1 +
+                    data?.pagination?.currentPage * resultPerPage -
+                    resultPerPage}
+                </td>
+                <td>{generic?.generic_name}</td>
                 <td>100</td>
                 <td>
                   <Link
@@ -79,7 +108,10 @@ const MedicineGroups = () => {
           <label>Result Per Page :</label>
           <select
             value={resultPerPage}
-            onChange={(e) => setResultPerPage(e.target.value)}
+            onChange={(e) => {
+              setResultPerPage(e.target.value);
+              setPage(1);
+            }}
             className="h-[27px] w-[70px] border border-gray-300 rounded ml-2"
           >
             {Array.from({ length: 10 }).map((a, i) => (
@@ -91,21 +123,40 @@ const MedicineGroups = () => {
         </div>
         {/* pagination */}
         <div className="flex items-center">
-          <span className="h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded cursor-pointer">
+          <button
+            onClick={(e) => setPage(page - 1)}
+            disabled={data?.pagination?.previousPage == null}
+            className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
+              data?.pagination?.previousPage != null
+                ? "border border-gray-300 text-black"
+                : "border border-gray-300 text-gray-300 cursor-not-allowed"
+            }`}
+          >
             <MdKeyboardArrowLeft className="h-5 w-5" />
-          </span>
+          </button>
           <div className="flex items-center px-4">
             <p className="mr-2">Page</p>
-            <select name="" id="">
-              <option value="">1</option>
-              <option value="">1</option>
-              <option value="">1</option>
-              <option value="">1</option>
+            <select value={page} onChange={(e) => setPage(e.target.value)}>
+              {Array.from({ length: data?.pagination?.totalPages }).map(
+                (_, index) => (
+                  <option key={index} value={index + 1}>
+                    {index + 1}
+                  </option>
+                )
+              )}
             </select>
           </div>
-          <span className="h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded cursor-pointer">
+          <button
+            onClick={(e) => setPage(page + 1)}
+            disabled={data?.pagination?.nextPage == null}
+            className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
+              data?.pagination?.nextPage != null
+                ? "border border-gray-300 text-black"
+                : "border border-gray-300 text-gray-300 cursor-not-allowed"
+            }`}
+          >
             <MdKeyboardArrowRight className="h-5 w-5" />
-          </span>
+          </button>
         </div>
       </div>
     </div>
