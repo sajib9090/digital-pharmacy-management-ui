@@ -57,23 +57,23 @@ const MedicineGroups = () => {
         />
       </div>
 
-      <div className="mt-4 w-full border border-[#d0cfcf] rounded bg-gray-50 relative">
-        {loading || error ? (
-          <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
-            {loading && <p className="text-center my-6">Please wait...</p>}
-            {error && (
-              <p className="text-center my-6 text-red-600">
-                Something went wrong.
-                <span
-                  onClick={() => window.location.reload()}
-                  className="ml-2 cursor-pointer underline"
-                >
-                  Please Refresh
-                </span>
-              </p>
-            )}
-          </div>
-        ) : (
+      {loading || error ? (
+        <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
+          {loading && <p className="text-center my-6 ">Please wait...</p>}
+          {error && (
+            <p className="text-center my-6 text-red-600">
+              Something went wrong.{" "}
+              <span
+                onClick={() => window.location.reload()}
+                className="ml-2 underline cursor-pointer"
+              >
+                Please Refresh
+              </span>
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="mt-4 w-full border border-[#d0cfcf] rounded bg-gray-50">
           <table className="w-full">
             <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
               <th className="w-[7%] text-start pl-4">No.</th>
@@ -107,13 +107,9 @@ const MedicineGroups = () => {
                 </tr>
               );
             })}
-
-            <div className="absolute top-10 left-[50%]">
-              {loading && <p>Loading...</p>}
-            </div>
           </table>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between mt-2 mb-4">
         <div>

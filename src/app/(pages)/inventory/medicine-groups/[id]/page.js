@@ -16,6 +16,7 @@ const SingleGroup = ({ params }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState("");
   const [sure, setSure] = useState(false);
+  const [dataLength, setDataLength] = useState(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -112,42 +113,52 @@ const SingleGroup = ({ params }) => {
       </div>
 
       {filteredData?.length > 0 ? (
-        <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
-          {/* table */}
-          <table className="w-full">
-            <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
-              <th className="w-[5%] text-start pl-4">No.</th>
-              <th className="w-[39%] text-start">Medicine Name</th>
-              <th className="w-[9%] text-start">Medicine ID</th>
-              <th className="w-[30%] text-start">Company Name</th>
-              <th className="w-[9%] text-start">Stock In Qty</th>
-              <th className="w-[8%] text-start">Action</th>
-            </tr>
+        <>
+          <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
+            {/* table */}
+            <table className="w-full">
+              <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
+                <th className="w-[5%] text-start pl-4">No.</th>
+                <th className="w-[39%] text-start">Medicine Name</th>
+                <th className="w-[9%] text-start">Medicine ID</th>
+                <th className="w-[30%] text-start">Company Name</th>
+                <th className="w-[9%] text-start">Stock In Qty</th>
+                <th className="w-[8%] text-start">Action</th>
+              </tr>
 
-            {filteredData?.map((d, i) => {
-              return (
-                <tr
-                  key={i}
-                  className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
-                >
-                  <td className="pl-4 py-2">{i + 1}</td>
-                  <td className="capitalize">{d?.medicine_name}</td>
-                  <td>0000000001</td>
-                  <td>Company</td>
-                  <td>1111</td>
-                  <td>
-                    <Link
-                      href={`/inventory/list-of-medicines/${i}`}
-                      className="flex items-center text-[12px] text-blue-600"
-                    >
-                      View Detail <RiArrowRightDoubleFill />
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </table>
-        </div>
+              {filteredData?.slice(0, dataLength)?.map((d, i) => {
+                return (
+                  <tr
+                    key={i}
+                    className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
+                  >
+                    <td className="pl-4 py-2">{i + 1}</td>
+                    <td className="capitalize">{d?.medicine_name}</td>
+                    <td>0000000001</td>
+                    <td>Company</td>
+                    <td>1111</td>
+                    <td>
+                      <Link
+                        href={`/inventory/list-of-medicines/${i}`}
+                        className="flex items-center text-[12px] text-blue-600"
+                      >
+                        View Detail <RiArrowRightDoubleFill />
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </table>
+          </div>
+          {filteredData?.length > 1 && dataLength == 1 && (
+            <p
+              onClick={() => setDataLength(filteredData?.length)}
+              className="text-center my-3 cursor-pointer underline"
+            >
+              See More
+            </p>
+          )}
+        </>
       ) : (
         <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
           <p className="text-center my-6 text-red-600">
