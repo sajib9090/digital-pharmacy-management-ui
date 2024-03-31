@@ -58,45 +58,61 @@ const MedicineGroups = () => {
       </div>
 
       <div className="mt-4 w-full border border-[#d0cfcf] rounded bg-gray-50 relative">
-        {/* table */}
-        <table className="w-full">
-          <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
-            <th className="w-[7%] text-start pl-4">No.</th>
-            <th className="w-[58%] text-start">Group Name</th>
-            <th className="w-[25%] text-start">No of Medicines</th>
-            <th className="w-[10%] text-start">Action</th>
-          </tr>
-
-          {generics?.data?.map((generic, i) => {
-            return (
-              <tr
-                key={generic?._id}
-                className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
-              >
-                <td className="pl-4 py-2">
-                  {i +
-                    1 +
-                    generics?.pagination?.currentPage * resultPerPage -
-                    resultPerPage}
-                </td>
-                <td className="capitalize">{generic?.generic_name}</td>
-                <td>{generic?.medicine_available}</td>
-                <td>
-                  <Link
-                    href={`/inventory/medicine-groups/${generic?._id}`}
-                    className="flex items-center text-[12px] text-blue-600"
-                  >
-                    View Detail <RiArrowRightDoubleFill />
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-
-          <div className="absolute top-10 left-[50%]">
-            {loading && <p>Loading...</p>}
+        {loading || error ? (
+          <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
+            {loading && <p className="text-center my-6">Please wait...</p>}
+            {error && (
+              <p className="text-center my-6 text-red-600">
+                Something went wrong.
+                <span
+                  onClick={() => window.location.reload()}
+                  className="ml-2 cursor-pointer underline"
+                >
+                  Please Refresh
+                </span>
+              </p>
+            )}
           </div>
-        </table>
+        ) : (
+          <table className="w-full">
+            <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
+              <th className="w-[7%] text-start pl-4">No.</th>
+              <th className="w-[58%] text-start">Group Name</th>
+              <th className="w-[25%] text-start">No of Medicines</th>
+              <th className="w-[10%] text-start">Action</th>
+            </tr>
+
+            {generics?.data?.map((generic, i) => {
+              return (
+                <tr
+                  key={generic?._id}
+                  className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
+                >
+                  <td className="pl-4 py-2">
+                    {i +
+                      1 +
+                      generics?.pagination?.currentPage * resultPerPage -
+                      resultPerPage}
+                  </td>
+                  <td className="capitalize">{generic?.generic_name}</td>
+                  <td>{generic?.medicine_available}</td>
+                  <td>
+                    <Link
+                      href={`/inventory/medicine-groups/${generic?._id}`}
+                      className="flex items-center text-[12px] text-blue-600"
+                    >
+                      View Detail <RiArrowRightDoubleFill />
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+
+            <div className="absolute top-10 left-[50%]">
+              {loading && <p>Loading...</p>}
+            </div>
+          </table>
+        )}
       </div>
 
       <div className="flex items-center justify-between mt-2 mb-4">
