@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import DateFormatter from "@/app/Components/DateFormatter/DateFormatter";
 import axios from "axios";
@@ -10,7 +9,7 @@ import { LuLoader2 } from "react-icons/lu";
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
 import { baseUrl } from "@/secrets.js";
 
-const SingleGroup = ({ params }) => {
+const SingleCompany = ({ params }) => {
   const [searchValue, setSearchValue] = useState("");
   const [data, setData] = useState({});
   const [filteredData, setFilteredData] = useState([]);
@@ -28,11 +27,11 @@ const SingleGroup = ({ params }) => {
     setFilteredData(filter);
   }, [searchValue]);
 
-  const handleDeleteGeneric = async () => {
+  const handleDeleteCompany = async () => {
     try {
       setDeleteLoading(true);
       const res = await axios.delete(
-        `${baseUrl}/api/v1/generics/delete/${params?.id}`
+        `${baseUrl}/api/v1/companies/delete/${params?.id}`
       );
       if (res) {
         setDeleteError("");
@@ -49,7 +48,7 @@ const SingleGroup = ({ params }) => {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/api/v1/generics/get-generic?id=${params?.id}`)
+      .get(`${baseUrl}/api/v1/companies/get-company?id=${params?.id}`)
       .then((res) => {
         setData(res?.data?.data);
         setFilteredData(res?.data.data?.medicine_available);
@@ -60,7 +59,6 @@ const SingleGroup = ({ params }) => {
         }
       });
   }, [params?.id]);
-
   return (
     <div className="pl-6 pt-2 container1">
       <div>
@@ -68,10 +66,10 @@ const SingleGroup = ({ params }) => {
           <Link href={"/inventory"} className="text-gray-400">
             Inventory {">"}{" "}
           </Link>
-          <Link className="text-gray-400" href={"/inventory/medicine-groups"}>
-            medicine-groups {">"}{" "}
+          <Link className="text-gray-400" href={"/inventory/list-of-companies"}>
+            list-of-companies {">"}{" "}
           </Link>
-          <Link href={"#"}>{data?.generic_slug}</Link>
+          <Link href={"#"}>{data?.company_slug}</Link>
         </div>
       </div>
 
@@ -81,12 +79,12 @@ const SingleGroup = ({ params }) => {
         </div>
         <div className="h-[100px] w-full flex items-center justify-between px-4">
           <div>
-            <p className="font-bold">{data?.generic_id}</p>
-            <p className="text-gray-500">Generic/Group Serial</p>
+            <p className="font-bold">{data?.company_id}</p>
+            <p className="text-gray-500">Company/Supplier Serial</p>
           </div>
           <div>
-            <p className="font-bold capitalize">{data?.generic_name}</p>
-            <p className="text-gray-500">Generic/Group Name</p>
+            <p className="font-bold capitalize">{data?.company_name}</p>
+            <p className="text-gray-500">Company/Supplier Name</p>
           </div>
           <div>
             <p className="font-bold capitalize">
@@ -171,7 +169,7 @@ const SingleGroup = ({ params }) => {
       {sure ? (
         <button
           onClick={() => {
-            handleDeleteGeneric();
+            handleDeleteCompany();
             setSure(false);
           }}
           className="mt-3 w-[180px] h-[40px] border border-orange-600 text-orange-600 hover:text-white transition-all duration-500 hover:bg-orange-600 rounded flex items-center justify-center"
@@ -185,7 +183,7 @@ const SingleGroup = ({ params }) => {
           className="mt-3 w-[180px] h-[40px] border border-red-600 text-red-600 hover:text-white transition-all duration-500 hover:bg-red-600 rounded flex items-center justify-center"
         >
           <RiDeleteBin6Line className="h-5 w-5 mr-2" />
-          Delete Generic{" "}
+          Delete Company{" "}
           {deleteLoading && <LuLoader2 className="h-5 w-5 animate-spin ml-2" />}
         </button>
       )}
@@ -193,4 +191,4 @@ const SingleGroup = ({ params }) => {
   );
 };
 
-export default SingleGroup;
+export default SingleCompany;

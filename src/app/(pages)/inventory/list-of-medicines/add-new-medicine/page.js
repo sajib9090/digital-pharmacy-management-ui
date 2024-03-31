@@ -7,7 +7,6 @@ import { MdCancel } from "react-icons/md";
 const AddNewMedicineForm = () => {
   const router = useRouter();
 
-
   return (
     <div className="pl-6 pt-2 container1">
       <div className="">
@@ -41,7 +40,7 @@ const AddNewMedicineForm = () => {
           </div>
           <div className="mt-6 flex items-center justify-between gap-4">
             <div className="w-full">
-              <label className="text-[14px]">Generic Name *</label>
+              <label className="text-[14px]">Group/Generic Name *</label>
               <select className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1">
                 <option value="" disabled selected>
                   Choose a Generic

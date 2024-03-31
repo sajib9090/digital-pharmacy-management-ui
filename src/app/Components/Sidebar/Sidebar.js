@@ -42,6 +42,10 @@ const Sidebar = () => {
           title: "Medicine Groups",
           link: "/medicine-groups",
         },
+        {
+          title: "List of Companies",
+          link: "/list-of-companies",
+        },
       ],
     },
     {
@@ -104,7 +108,7 @@ const Sidebar = () => {
 
             return (
               <div
-                onMouseEnter={() => handleSubNav(index)}
+                onClick={() => handleSubNav(index)}
                 key={n?.href}
                 className="bg-[#1d242e]"
               >

@@ -1,39 +1,39 @@
 "use client";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { MdCancel } from "react-icons/md";
 import { LuLoader2 } from "react-icons/lu";
+import axios from "axios";
 import { baseUrl } from "@/secrets.js";
 
-const AddNewGroup = () => {
+const AddNewCompany = () => {
   const shop_name = "rayan pharmacy";
   const router = useRouter();
-  const [groupValue, setGroupValue] = useState("");
+  const [companyValue, setCompanyValue] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const handleCreateGroup = async (e) => {
+  const handleCreateCompany = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const data = {
         shop_name: shop_name,
-        generic_name: groupValue,
+        company_name: companyValue,
       };
 
       const res = await axios.post(
-        `${baseUrl}/api/v1/generics/create/generic`,
+        `${baseUrl}/api/v1/companies/create/company`,
         data
       );
 
       if (res) {
         setError("");
-        setGroupValue("");
-        setSuccess(res.data.message);
+        setCompanyValue("");
+        setSuccess(res?.data?.message);
       }
     } catch (err) {
       setError(
@@ -46,7 +46,6 @@ const AddNewGroup = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="pl-6 pt-2 container1">
       <div className="">
@@ -54,10 +53,10 @@ const AddNewGroup = () => {
           <Link href={"/inventory"} className="text-gray-400">
             Inventory {">"} {""}{" "}
           </Link>
-          <Link href={"/inventory/list-of-medicines"} className="text-gray-400">
-            Medicine-groups {">"}{" "}
+          <Link href={"/inventory/list-of-companies"} className="text-gray-400">
+            List-of-companies {">"}{" "}
           </Link>
-          <Link href={"#"}>Add New Group</Link>
+          <Link href={"#"}>Add New company</Link>
         </div>
         <p>*All fields are mandatory, except mentioned as (optional).</p>
       </div>
@@ -67,14 +66,14 @@ const AddNewGroup = () => {
         <div onClick={() => router.back()} className="flex justify-end">
           <MdCancel className="h-6 w-6 text-[#f0483e] cursor-pointer" />
         </div>
-        <form onSubmit={handleCreateGroup} className="w-full">
+        <form onSubmit={handleCreateCompany} className="w-full">
           <div className="mt-6">
-            <label className="text-[14px]">Group/Generic Name *</label>
+            <label className="text-[14px]">Company/Supplier Name *</label>
             <input
               type="text"
-              value={groupValue}
-              onChange={(e) => setGroupValue(e.target.value)}
-              placeholder="Enter group/generic name max 100 characters"
+              value={companyValue}
+              onChange={(e) => setCompanyValue(e.target.value)}
+              placeholder="Enter company/supplier name max 100 characters"
               className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
             />
           </div>
@@ -84,9 +83,11 @@ const AddNewGroup = () => {
 
           <div className="mt-4 flex items-center justify-between gap-4">
             <button
-              disabled={!groupValue || loading}
+              disabled={!companyValue || loading}
               className={`h-[35px] w-[150px] rounded text-white flex items-center justify-center ${
-                groupValue ? "bg-[#f0483e]" : "cursor-not-allowed bg-[#474747]"
+                companyValue
+                  ? "bg-[#f0483e]"
+                  : "cursor-not-allowed bg-[#474747]"
               }`}
             >
               Save Details
@@ -99,4 +100,4 @@ const AddNewGroup = () => {
   );
 };
 
-export default AddNewGroup;
+export default AddNewCompany;

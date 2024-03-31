@@ -6,21 +6,21 @@ import { IoIosAdd } from "react-icons/io";
 import { RiArrowRightDoubleFill } from "react-icons/ri";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { useGenericStore } from "@/app/stores/genericStore";
-import PrimaryLoading from "@/app/Components/PrimaryLoading/PrimaryLoading";
+import { useCompanyStore } from "@/app/stores/companyStore";
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
+import PrimaryLoading from "@/app/Components/PrimaryLoading/PrimaryLoading";
 
-const MedicineGroups = () => {
+const ListOfCompanies = () => {
   const shopName = "rayan pharmacy";
-  const { generics, getAllGenerics, loading, error } = useGenericStore();
+  const { companies, getAllCompanies, companyLoading, companyError } =
+    useCompanyStore();
   const [searchValue, setSearchValue] = useState("");
   const [resultPerPage, setResultPerPage] = useState("10");
-  const [page, setPage] = useState(generics.pagination?.currentPage || 1);
+  const [page, setPage] = useState(companies.pagination?.currentPage || 1);
 
   useEffect(() => {
-    getAllGenerics(shopName, page, resultPerPage, searchValue);
+    getAllCompanies(shopName, page, resultPerPage, searchValue);
   }, [resultPerPage, page, searchValue]);
-
   return (
     <div className="pl-6 pt-2 container1">
       <div className="flex justify-between">
@@ -30,18 +30,19 @@ const MedicineGroups = () => {
               Inventory {">"}{" "}
             </Link>
             <Link href={"/inventory/medicine-groups"}>
-              Medicine-groups (
-              {generics?.data_found ? generics?.data_found : "00"})
+              List-of-companies ({companies?.data_found})
             </Link>
           </div>
-          <p className="text-[14px] capitalize">list of medicines groups</p>
+          <p className="text-[14px] capitalize">
+            list of Pharmaceuticals companies
+          </p>
         </div>
         <div>
           <Link
-            href={"/inventory/medicine-groups/add-new-group"}
+            href={"/inventory/list-of-companies/add-new-company"}
             className="capitalize flex items-center justify-center h-[44px] w-[175px] bg-[#f0483e] text-white rounded"
           >
-            <IoIosAdd className="h-6 w-6" /> add new group
+            <IoIosAdd className="h-6 w-6" /> add new company
           </Link>
         </div>
       </div>
@@ -55,40 +56,45 @@ const MedicineGroups = () => {
           }}
           className="rounded"
           type="search"
-          placeholder="Search medicine group..."
+          placeholder="Search suppliers..."
         />
       </div>
 
-      {error ? (
-        <PrimaryError message={"Oops! Something went wrong!"} />
+      {companyError ? (
+        <PrimaryError message={"Oops! Something went wrong!"} refresh={true} />
       ) : (
         <>
           <div className="mt-4 w-full border border-[#d0cfcf] rounded bg-gray-50 relative">
+            {/* table */}
             <table className="w-full">
               <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
                 <th className="w-[5%] text-start pl-4">No.</th>
-                <th className="w-[70%] text-start">Group/Generic Name</th>
+                <th className="w-[70%] text-start">
+                  Company/Pharmaceuticals Name
+                </th>
                 <th className="w-[15%] text-start">No of Medicines</th>
                 <th className="w-[10%] text-start">Action</th>
               </tr>
 
-              {generics?.data?.map((generic, i) => {
+              {companies?.data?.map((company, i) => {
                 return (
                   <tr
-                    key={generic?._id}
+                    key={i}
                     className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
                   >
                     <td className="pl-4 py-2">
+                      {" "}
                       {i +
                         1 +
-                        generics?.pagination?.currentPage * resultPerPage -
+                        companies?.pagination?.currentPage * resultPerPage -
                         resultPerPage}
                     </td>
-                    <td className="capitalize">{generic?.generic_name}</td>
-                    <td>{generic?.medicine_available}</td>
+                    <td className="capitalize">{company?.company_name}</td>
+                    <td>{company?.medicine_available}</td>
+
                     <td>
                       <Link
-                        href={`/inventory/medicine-groups/${generic?._id}`}
+                        href={`/inventory/list-of-companies/${company?._id}`}
                         className="flex items-center text-[12px] text-blue-600"
                       >
                         View Detail <RiArrowRightDoubleFill />
@@ -99,7 +105,7 @@ const MedicineGroups = () => {
               })}
             </table>
 
-            {loading && (
+            {companyLoading && (
               <div className="absolute left-[45%] top-10">
                 <PrimaryLoading message={"Please wait..."} />
               </div>
@@ -111,11 +117,8 @@ const MedicineGroups = () => {
               <label>Result Per Page :</label>
               <select
                 value={resultPerPage}
-                onChange={(e) => {
-                  setResultPerPage(e.target.value);
-                  setPage(1);
-                }}
-                className="h-[27px] w-[70px] border border-gray-300 rounded ml-2"
+                onChange={(e) => setResultPerPage(e.target.value)}
+                className="h-[27px] w-[80px] border border-gray-300 rounded ml-2"
               >
                 {Array.from({ length: 10 }).map((a, i) => (
                   <option key={i} value={i * 10 + 10}>
@@ -128,9 +131,11 @@ const MedicineGroups = () => {
             <div className="flex items-center">
               <button
                 onClick={(e) => setPage(page - 1)}
-                disabled={generics?.pagination?.previousPage == null || loading}
+                disabled={
+                  companies?.pagination?.previousPage == null || companyLoading
+                }
                 className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
-                  generics?.pagination?.previousPage != null
+                  companies?.pagination?.previousPage != null
                     ? "border border-gray-300 text-black"
                     : "border border-gray-300 text-gray-300 cursor-not-allowed"
                 }`}
@@ -139,21 +144,27 @@ const MedicineGroups = () => {
               </button>
               <div className="flex items-center px-4">
                 <p className="mr-2">Page</p>
-                <select value={page} onChange={(e) => setPage(e.target.value)}>
-                  {Array.from({ length: generics?.pagination?.totalPages }).map(
-                    (_, index) => (
-                      <option key={index} value={index + 1}>
-                        {index + 1}
-                      </option>
-                    )
-                  )}
+                <select
+                  value={page}
+                  onChange={(e) => setPage(e.target.value)}
+                  className="w-[40px]"
+                >
+                  {Array.from({
+                    length: companies?.pagination?.totalPages,
+                  }).map((_, index) => (
+                    <option key={index} value={index + 1}>
+                      {index + 1}
+                    </option>
+                  ))}
                 </select>
               </div>
               <button
                 onClick={(e) => setPage(page + 1)}
-                disabled={generics?.pagination?.nextPage == null || loading}
+                disabled={
+                  companies?.pagination?.nextPage == null || companyLoading
+                }
                 className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
-                  generics?.pagination?.nextPage != null
+                  companies?.pagination?.nextPage != null
                     ? "border border-gray-300 text-black"
                     : "border border-gray-300 text-gray-300 cursor-not-allowed"
                 }`}
@@ -168,4 +179,4 @@ const MedicineGroups = () => {
   );
 };
 
-export default MedicineGroups;
+export default ListOfCompanies;
