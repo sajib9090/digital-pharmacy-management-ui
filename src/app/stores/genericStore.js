@@ -1,7 +1,8 @@
 import axios from "axios";
 import { create } from "zustand";
 
-const baseUrl = "http://localhost:8000";
+// export const baseUrl = "http://localhost:8000";
+export const baseUrl = "https://digital-pharmacy-management-backend.vercel.app";
 export const useGenericStore = create((set) => ({
   generics: [],
   loading: false,

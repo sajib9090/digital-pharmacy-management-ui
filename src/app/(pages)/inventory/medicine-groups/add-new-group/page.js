@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { MdCancel } from "react-icons/md";
 import { LuLoader2 } from "react-icons/lu";
+import { baseUrl } from "@/app/stores/genericStore";
 
 const AddNewGroup = () => {
   const shop_name = "rayan pharmacy";
@@ -25,7 +26,7 @@ const AddNewGroup = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/generics/create/generic",
+        `${baseUrl}/api/v1/generics/create/generic`,
         data
       );
 

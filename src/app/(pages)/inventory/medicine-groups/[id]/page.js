@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import DateFormatter from "@/app/Components/DateFormatter/DateFormatter";
 import axios from "axios";
@@ -6,36 +7,55 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { RiArrowRightDoubleFill, RiDeleteBin6Line } from "react-icons/ri";
 import { LuLoader2 } from "react-icons/lu";
+import { baseUrl } from "@/app/stores/genericStore";
 
 const SingleGroup = ({ params }) => {
+  const [searchValue, setSearchValue] = useState("");
   const [data, setData] = useState({});
+  const [filteredData, setFilteredData] = useState([]);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const [sure, setSure] = useState(false);
   const router = useRouter();
 
-  const handleDeleteGeneric = () => {
-    setDeleteLoading(true);
-    axios
-      .delete(`http://localhost:8000/api/v1/generics/delete/${params?.id}`)
-      .then((res) => {
-        console.log(res);
+  useEffect(() => {
+    const filter = data?.medicine_available?.filter((item) =>
+      item?.medicine_name.includes(searchValue)
+    );
+
+    setFilteredData(filter);
+  }, [searchValue]);
+
+  const handleDeleteGeneric = async () => {
+    try {
+      setDeleteLoading(true);
+      const res = await axios.delete(
+        `${baseUrl}/api/v1/generics/delete/${params?.id}`
+      );
+      if (res) {
+        setDeleteError("");
         router.back();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setDeleteLoading(false);
-      });
+      }
+    } catch (err) {
+      if (err) {
+        setDeleteError("Something went wrong");
+      }
+    } finally {
+      setDeleteLoading(false);
+    }
   };
+
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/v1/generics/get-generic?id=${params?.id}`)
+      .get(`${baseUrl}/api/v1/generics/get-generic?id=${params?.id}`)
       .then((res) => {
         setData(res?.data?.data);
+        setFilteredData(res?.data.data?.medicine_available);
       })
       .catch((err) => {
-        console.log(err);
+        if (err) {
+          setDeleteError("Something went wrong");
+        }
       });
   }, [params?.id]);
 
@@ -53,7 +73,7 @@ const SingleGroup = ({ params }) => {
         </div>
       </div>
 
-      <div className="mt-4 h-[140px] w-[900px] border border-[#d0cfcf] rounded">
+      <div className="mt-4 h-[140px] w-full border border-[#d0cfcf] rounded">
         <div className="h-[40px] w-full border-b border-[#d0cfcf] flex items-center px-4 font-semibold">
           <p>Details Info</p>
         </div>
@@ -79,7 +99,19 @@ const SingleGroup = ({ params }) => {
         </div>
       </div>
 
-      {data?.medicine_available?.length > 0 ? (
+      <div className="search mt-4 -mb-4">
+        <input
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
+          className="rounded"
+          type="search"
+          placeholder="Search medicine group..."
+        />
+      </div>
+
+      {filteredData?.length > 0 ? (
         <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
           {/* table */}
           <table className="w-full">
@@ -92,7 +124,7 @@ const SingleGroup = ({ params }) => {
               <th className="w-[8%] text-start">Action</th>
             </tr>
 
-            {data?.medicine_available?.map((d, i) => {
+            {filteredData?.map((d, i) => {
               return (
                 <tr
                   key={i}
@@ -118,11 +150,13 @@ const SingleGroup = ({ params }) => {
         </div>
       ) : (
         <div className="mt-8 w-full border border-[#d0cfcf] rounded bg-gray-50">
-          <p className="text-center my-6">
-            No details data available for this generic.
+          <p className="text-center my-6 text-red-600">
+            Oops! No details data found.
           </p>
         </div>
       )}
+
+      <p className="mt-3 text-red-600">{deleteError}</p>
 
       {/* action button */}
 
