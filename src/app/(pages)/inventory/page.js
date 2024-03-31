@@ -5,13 +5,16 @@ import { IoBagAddOutline } from "react-icons/io5";
 import { BiErrorAlt } from "react-icons/bi";
 import { useGenericStore } from "@/app/stores/genericStore";
 import { HiOutlineBuildingLibrary } from "react-icons/hi2";
+import { useCompanyStore } from "@/app/stores/companyStore";
 
 const Inventory = () => {
   const shopName = "rayan pharmacy";
   const { generics, getAllGenerics } = useGenericStore();
+  const { companies, getAllCompanies } = useCompanyStore();
 
   useEffect(() => {
     getAllGenerics(shopName);
+    getAllCompanies(shopName);
   }, []);
 
   return (
@@ -44,7 +47,7 @@ const Inventory = () => {
           secondaryBorderColor={"border-[#01A768]"}
         />
         <Card
-          title={"9"}
+          title={companies?.data_found}
           info={"companies/suppliers"}
           icon={
             <HiOutlineBuildingLibrary className="h-10 w-10 text-[#b7a324]" />
