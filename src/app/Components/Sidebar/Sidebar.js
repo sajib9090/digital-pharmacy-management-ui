@@ -35,12 +35,16 @@ const Sidebar = () => {
       downArrow: <MdKeyboardArrowDown className="h-4 w-4 absolute right-4" />,
       subNav: [
         {
-          title: "List of Medicines",
-          link: "/list-of-medicines",
+          title: "Dosage Forms",
+          link: "/dosage-forms",
         },
         {
           title: "Medicine Groups",
           link: "/medicine-groups",
+        },
+        {
+          title: "List of Medicines",
+          link: "/list-of-medicines",
         },
         {
           title: "List of Companies",
