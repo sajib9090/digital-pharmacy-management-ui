@@ -8,8 +8,8 @@ export const useDosageStore = create((set) => ({
   dosageError: "",
   getAllDosageForms: async (
     shopName,
-    page = null,
-    limit = null,
+    page = "",
+    limit = "",
     searchValue = ""
   ) => {
     try {

@@ -12,7 +12,8 @@ import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
 
 const MedicineGroups = () => {
   const shopName = "rayan pharmacy";
-  const { generics, getAllGenerics, loading, error } = useGenericStore();
+  const { generics, getAllGenerics, genericLoading, genericError } =
+    useGenericStore();
   const [searchValue, setSearchValue] = useState("");
   const [resultPerPage, setResultPerPage] = useState("10");
   const [page, setPage] = useState(generics.pagination?.currentPage || 1);
@@ -59,7 +60,7 @@ const MedicineGroups = () => {
         />
       </div>
 
-      {error ? (
+      {genericError ? (
         <PrimaryError message={"Oops! Something went wrong!"} />
       ) : (
         <>
@@ -99,7 +100,7 @@ const MedicineGroups = () => {
               })}
             </table>
 
-            {loading && (
+            {genericLoading && (
               <div className="absolute left-[45%] top-10">
                 <PrimaryLoading message={"Please wait..."} />
               </div>
@@ -128,7 +129,9 @@ const MedicineGroups = () => {
             <div className="flex items-center">
               <button
                 onClick={(e) => setPage(page - 1)}
-                disabled={generics?.pagination?.previousPage == null || loading}
+                disabled={
+                  generics?.pagination?.previousPage == null || genericLoading
+                }
                 className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
                   generics?.pagination?.previousPage != null
                     ? "border border-gray-300 text-black"
@@ -151,7 +154,9 @@ const MedicineGroups = () => {
               </div>
               <button
                 onClick={(e) => setPage(page + 1)}
-                disabled={generics?.pagination?.nextPage == null || loading}
+                disabled={
+                  generics?.pagination?.nextPage == null || genericLoading
+                }
                 className={`h-[27px] w-[27px] flex items-center justify-center border border-gray-300 rounded ${
                   generics?.pagination?.nextPage != null
                     ? "border border-gray-300 text-black"

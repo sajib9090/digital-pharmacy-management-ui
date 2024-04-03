@@ -120,7 +120,7 @@ const ListOfCompanies = () => {
                 onChange={(e) => setResultPerPage(e.target.value)}
                 className="h-[27px] w-[80px] border border-gray-300 rounded ml-2"
               >
-                {Array.from({ length: 10 }).map((a, i) => (
+                {Array.from({ length: 10 }).map((_, i) => (
                   <option key={i} value={i * 10 + 10}>
                     {i * 10 + 10}
                   </option>
@@ -130,7 +130,7 @@ const ListOfCompanies = () => {
             {/* pagination */}
             <div className="flex items-center">
               <button
-                onClick={(e) => setPage(page - 1)}
+                onClick={() => setPage(page - 1)}
                 disabled={
                   companies?.pagination?.previousPage == null || companyLoading
                 }

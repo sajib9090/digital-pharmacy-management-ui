@@ -73,7 +73,7 @@ const AddNewDosage = () => {
               type="text"
               value={dosageValue}
               onChange={(e) => setDosageValue(e.target.value)}
-              placeholder="Enter company/supplier name max 100 characters"
+              placeholder="Enter dosage form tablet/tab/capsule/cap/syrup/syp"
               className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
             />
           </div>

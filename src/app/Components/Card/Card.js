@@ -12,6 +12,7 @@ const Card = ({
   primaryBg,
   secondaryBg,
   secondaryBorderColor,
+  fetchingLoading,
 }) => {
   return (
     <div
@@ -20,7 +21,12 @@ const Card = ({
       <div className="flex flex-col justify-center items-center mt-4">
         {/* <RiShieldCrossLine className="h-10 w-10 text-[#01A768]" /> */}
         {icon}
-        <h1 className="text-[20px] font-bold">{title}</h1>
+
+        {fetchingLoading ? (
+          <h1 className="text-[20px] font-bold">{"Please wait..."}</h1>
+        ) : (
+          <h1 className="text-[20px] font-bold">{title}</h1>
+        )}
         <p className="capitalize">{info}</p>
       </div>
       <div

@@ -8,8 +8,8 @@ export const useCompanyStore = create((set) => ({
   companyError: "",
   getAllCompanies: async (
     shopName,
-    page = null,
-    limit = null,
+    page = "",
+    limit = "",
     searchValue = ""
   ) => {
     try {
