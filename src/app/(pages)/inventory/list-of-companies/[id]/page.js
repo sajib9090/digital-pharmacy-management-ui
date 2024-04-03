@@ -138,7 +138,7 @@ const SingleCompany = ({ params }) => {
                     <td>1111</td>
                     <td>
                       <Link
-                        href={`/inventory/list-of-medicines/${i}`}
+                        href={`/inventory/list-of-medicines/${d?._id}`}
                         className="flex items-center text-[12px] text-blue-600"
                       >
                         View Detail <RiArrowRightDoubleFill />
