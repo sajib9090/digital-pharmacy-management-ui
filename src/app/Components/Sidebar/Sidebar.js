@@ -10,6 +10,7 @@ import { IoHomeOutline, IoBugSharp } from "react-icons/io5";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { SlCalculator } from "react-icons/sl";
 import { TbCoinTaka } from "react-icons/tb";
+import { BiPurchaseTagAlt } from "react-icons/bi";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -66,6 +67,11 @@ const Sidebar = () => {
       ],
     },
     {
+      title: "Purchase",
+      icon: <BiPurchaseTagAlt className="h-4 w-4" />,
+      href: "/purchase",
+    },
+    {
       title: "Sell",
       icon: <TbCoinTaka className="h-4 w-4" />,
       href: "/sell",
@@ -112,7 +118,7 @@ const Sidebar = () => {
 
             return (
               <div
-                onClick={() => handleSubNav(index)}
+                onMouseEnter={() => handleSubNav(index)}
                 key={n?.href}
                 className="bg-[#1d242e]"
               >

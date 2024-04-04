@@ -13,9 +13,9 @@ import { LuLoader2 } from "react-icons/lu";
 const AddNewMedicineForm = () => {
   const shopName = "rayan pharmacy";
   const router = useRouter();
-  const { dosageForms, getAllDosageForms } = useDosageStore();
-  const { companies, getAllCompanies } = useCompanyStore();
-  const { generics, getAllGenerics } = useGenericStore();
+  const { dosageForms, getAllDosageForms, dosageLoading } = useDosageStore();
+  const { companies, getAllCompanies, companyLoading } = useCompanyStore();
+  const { generics, getAllGenerics, genericLoading } = useGenericStore();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -64,9 +64,23 @@ const AddNewMedicineForm = () => {
   };
 
   useEffect(() => {
-    getAllGenerics(shopName);
-    getAllCompanies(shopName);
-    getAllDosageForms(shopName);
+    const abortController = new AbortController();
+
+    const fetchAllData = async () => {
+      try {
+        await getAllGenerics(shopName, { signal: abortController.signal });
+        await getAllCompanies(shopName, { signal: abortController.signal });
+        await getAllDosageForms(shopName, { signal: abortController.signal });
+      } catch (error) {
+        setError(error?.response?.data?.message || "Server Error!");
+      }
+    };
+
+    fetchAllData();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
@@ -129,12 +143,13 @@ const AddNewMedicineForm = () => {
                 </Link>
               </div>
               <select
+                disabled={genericLoading}
                 required
                 name="generic"
                 className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
               >
                 <option value="" disabled selected>
-                  Choose a Generic
+                  {genericLoading ? "Please wait..." : "Choose a Generic"}
                 </option>
                 {generics?.data?.map((generic) => (
                   <option
@@ -165,12 +180,13 @@ const AddNewMedicineForm = () => {
                 </Link>
               </div>
               <select
+                disabled={companyLoading}
                 required
                 name="company"
                 className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
               >
                 <option value="" disabled selected>
-                  Choose a Company
+                  {companyLoading ? "Please wait..." : "Choose a Company"}
                 </option>
                 {companies?.data?.map((company) => (
                   <option
@@ -219,13 +235,14 @@ const AddNewMedicineForm = () => {
                 </Link>
               </div>
               <select
+                disabled={dosageLoading}
                 required
                 onChange={(e) => setDosageForm(e.target.value)}
                 name="dosageForm"
                 className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
               >
                 <option value="" disabled selected>
-                  Choose a dosage form
+                  {dosageLoading ? "Please wait..." : "Choose a dosage form"}
                 </option>
                 {dosageForms?.data?.map((dosage) => (
                   <option
@@ -248,7 +265,8 @@ const AddNewMedicineForm = () => {
               <label className="text-[14px]">Purchase Price in Number*</label>
               <input
                 required
-                type="number"
+                type="text"
+                pattern="[0-9]+(\.[0-9]+)?"
                 name="purchasePrice"
                 placeholder="Enter purchase price"
                 className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"
@@ -261,7 +279,8 @@ const AddNewMedicineForm = () => {
               <label className="text-[14px]">Sell Price in Number*</label>
               <input
                 required
-                type="number"
+                type="text"
+                pattern="[0-9]+(\.[0-9]+)?"
                 name="sellPrice"
                 placeholder="Enter sell price"
                 className="h-[35px] w-full border border-[#c1c1c1] rounded px-2 mt-1"

@@ -48,17 +48,21 @@ const SingleGroup = ({ params }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/api/v1/generics/get-generic?id=${params?.id}`)
-      .then((res) => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `${baseUrl}/api/v1/generics/get-generic?id=${params?.id}`
+        );
         setData(res?.data?.data);
         setFilteredData(res?.data.data?.medicine_available);
-      })
-      .catch((err) => {
+      } catch (err) {
         if (err) {
           setDeleteError("Something went wrong");
         }
-      });
+      }
+    };
+
+    fetchData();
   }, [params?.id]);
 
   return (
@@ -121,8 +125,8 @@ const SingleGroup = ({ params }) => {
               <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
                 <th className="w-[5%] text-start pl-4">No.</th>
                 <th className="w-[39%] text-start">Medicine Name</th>
-                <th className="w-[9%] text-start">Medicine ID</th>
-                <th className="w-[30%] text-start">Company Name</th>
+                <th className="w-[11%] text-start">Medicine ID</th>
+                <th className="w-[28%] text-start">Company Name</th>
                 <th className="w-[9%] text-start">Stock In Qty</th>
                 <th className="w-[8%] text-start">Action</th>
               </tr>
@@ -135,12 +139,12 @@ const SingleGroup = ({ params }) => {
                   >
                     <td className="pl-4 py-2">{i + 1}</td>
                     <td className="capitalize">{d?.medicine_name}</td>
-                    <td>0000000001</td>
-                    <td>Company</td>
-                    <td>1111</td>
+                    <td>{d?.medicine_id}</td>
+                    <td>{d?.company_name}</td>
+                    <td>{d?.stock_left}</td>
                     <td>
                       <Link
-                        href={`/inventory/list-of-medicines/${i}`}
+                        href={`/inventory/list-of-medicines/${d?._id}`}
                         className="flex items-center text-[12px] text-blue-600"
                       >
                         View Detail <RiArrowRightDoubleFill />
