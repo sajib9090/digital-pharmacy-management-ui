@@ -6,26 +6,25 @@ import { CiFilter } from "react-icons/ci";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowRightDoubleFill } from "react-icons/ri";
 
-const Purchase = () => {
+const PurchaseReport = () => {
   const [resultPerPage, setResultPerPage] = useState(10);
   return (
     <div className="pl-6 pt-2 container1">
       <div className="flex justify-between">
-        <div>
-          <div className="text-[18px] font-bold capitalize">
-            <Link href={"/purchase"} className="text-gray-400">
-              Purchase
-            </Link>
-          </div>
-          <p className="text-[14px] capitalize">list of purchase invoices</p>
+        <div className="text-[18px] font-bold capitalize">
+          <Link href={"/reports"} className="text-gray-400">
+            Reports {">"}{" "}
+          </Link>
+          <Link href={"/reports/purchase-report"}>Purchase-report</Link>
         </div>
         <div>
           <Link
-            href={"/purchase/medicine-purchase"}
+            href={"/reports/purchase-report/medicine-purchase"}
             prefetch={true}
-            className="capitalize flex items-center justify-center h-[44px] w-[175px] bg-[#f0483e] text-white rounded"
+            className="capitalize flex items-center justify-center h-[44px] w-[180px] bg-[#f0483e] text-white rounded"
           >
-            <IoIosAdd className="h-6 w-6" /> medicine purchase
+            <IoIosAdd className="h-6 w-6" />
+            medicine purchase
           </Link>
         </div>
       </div>
@@ -152,4 +151,4 @@ const Purchase = () => {
   );
 };
 
-export default Purchase;
+export default PurchaseReport;

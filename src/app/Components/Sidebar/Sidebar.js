@@ -61,15 +61,14 @@ const Sidebar = () => {
       downArrow: <MdKeyboardArrowDown className="h-4 w-4 absolute right-4" />,
       subNav: [
         {
+          title: "Purchase Report",
+          link: "/purchase-report",
+        },
+        {
           title: "Sales Report",
           link: "/sales-report",
         },
       ],
-    },
-    {
-      title: "Purchase",
-      icon: <BiPurchaseTagAlt className="h-4 w-4" />,
-      href: "/purchase",
     },
     {
       title: "Sell",
@@ -118,7 +117,7 @@ const Sidebar = () => {
 
             return (
               <div
-                onMouseEnter={() => handleSubNav(index)}
+                onClick={() => handleSubNav(index)}
                 key={n?.href}
                 className="bg-[#1d242e]"
               >

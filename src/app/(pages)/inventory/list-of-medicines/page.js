@@ -170,9 +170,9 @@ const ListOfMedicines = () => {
             <table className="w-full">
               <tr className="border-b border-[#d0cfcf] h-[35px] w-full text-[14px]">
                 <th className="w-[5%] text-start pl-4">No.</th>
-                <th className="w-[39%] text-start">Medicine Name</th>
+                <th className="w-[43%] text-start">Medicine Name</th>
                 <th className="w-[10%] text-start">Medicine ID</th>
-                <th className="w-[29%] text-start">Group/Generic Name</th>
+                <th className="w-[25%] text-start">Group/Generic Name</th>
                 <th className="w-[9%] text-start">Stock In Qty</th>
                 <th className="w-[8%] text-start">Action</th>
               </tr>
@@ -186,9 +186,16 @@ const ListOfMedicines = () => {
                     <td className="pl-4 py-2">{i + 1}</td>
                     <td className="capitalize">
                       <span className="mr-2 text-gray-500">
-                        {medicine?.dosage_form}.
+                        {medicine?.dosage_form?.length > 6
+                          ? medicine?.dosage_form?.slice(0, 6) + ".."
+                          : medicine?.dosage_form}
+                        .
                       </span>
-                      <span>{medicine?.medicine_name}</span>
+                      <span>
+                        {medicine?.medicine_name?.length > 30
+                          ? medicine?.medicine_name?.slice(0, 30) + ".."
+                          : medicine?.medicine_name}
+                      </span>
                       <span className="ml-2 text-gray-500">
                         {medicine?.strength}
                       </span>
@@ -196,7 +203,11 @@ const ListOfMedicines = () => {
                     <td className="text-gray-500 text-xs">
                       {medicine?.medicine_id}
                     </td>
-                    <td className="capitalize">{medicine?.generic_name}</td>
+                    <td className="capitalize">
+                      {medicine?.generic_name?.length > 30
+                        ? medicine?.generic_name?.slice(0, 30) + ".."
+                        : medicine?.generic_name}
+                    </td>
                     <td
                       className={`${
                         medicine?.stock_left ? "text-green-700" : "text-red-600"
