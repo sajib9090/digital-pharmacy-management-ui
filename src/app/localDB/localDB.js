@@ -25,4 +25,34 @@ const updatePurchaseCart = (data, quantity) => {
   return previousData;
 };
 
-export { cartData, updatePurchaseCart };
+const removeSinglePurchaseItem = (item) => {
+  let existingData = JSON.parse(localStorage.getItem("purchase_cart")) || [];
+  const existingItemIndex = existingData.findIndex((i) => i?._id === item?._id);
+
+  if (existingItemIndex !== -1) {
+    existingData.splice(existingItemIndex, 1);
+    localStorage.setItem("purchase_cart", JSON.stringify(existingData));
+  }
+
+  return existingData;
+};
+
+const increaseItemQuantity = (item) => {
+  let existingData = JSON.parse(localStorage.getItem("purchase_cart")) || [];
+  const existingItem = existingData.find((i) => i?._id === item?._id);
+
+  if (existingItem) {
+    existingItem.purchase_quantity = (existingItem.purchase_quantity || 0) + 1;
+    localStorage.setItem("purchase_cart", JSON.stringify(existingData));
+    return true;
+  }
+
+  return false;
+};
+
+export {
+  cartData,
+  updatePurchaseCart,
+  removeSinglePurchaseItem,
+  increaseItemQuantity,
+};

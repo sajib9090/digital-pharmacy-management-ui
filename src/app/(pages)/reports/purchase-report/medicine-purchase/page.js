@@ -1,6 +1,11 @@
 "use client";
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
-import { cartData, updatePurchaseCart } from "@/app/localDB/localDB";
+import {
+  cartData,
+  increaseItemQuantity,
+  removeSinglePurchaseItem,
+  updatePurchaseCart,
+} from "@/app/localDB/localDB";
 import { useMedicineStore } from "@/app/stores/medicineStore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -28,6 +33,17 @@ const MedicinePurchase = () => {
     updatePurchaseCart(data, quantity);
     fetchLocalData();
     setSearchValue("");
+  };
+
+  const handleQuantityIncrease = (item) => {
+    increaseItemQuantity(item);
+    fetchLocalData();
+  };
+
+  const handleRemoveItem = (item) => {
+    console.log(item);
+    removeSinglePurchaseItem(item);
+    fetchLocalData();
   };
 
   useEffect(() => {
@@ -189,21 +205,28 @@ const MedicinePurchase = () => {
                       : item?.company_name}
                   </td>
                   <td className="text-center min-h-[35px] flex items-center justify-center">
-                    <button className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center">
+                    <button
+                      // onClick={() => handleQuantityDecrease(item)}
+                      className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center"
+                    >
                       -
                     </button>
                     <button className="min-w-[40px]">
                       {item?.purchase_quantity}
                     </button>
-                    <button className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center">
+                    <button
+                      onClick={() => handleQuantityIncrease(item)}
+                      className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center"
+                    >
                       +
                     </button>
                   </td>
                   <td className="">
                     <RiDeleteBack2Fill
+                      onClick={() => handleRemoveItem(item)}
                       title="remove"
                       className="mx-auto h-5 w-5 cursor-pointer text-black hover:text-opacity-70"
-                    />
+                    ></RiDeleteBack2Fill>
                   </td>
                 </tr>
               ))}
