@@ -2,6 +2,7 @@
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
 import {
   cartData,
+  decreaseItemQuantity,
   increaseItemQuantity,
   removeSinglePurchaseItem,
   updatePurchaseCart,
@@ -37,6 +38,10 @@ const MedicinePurchase = () => {
 
   const handleQuantityIncrease = (item) => {
     increaseItemQuantity(item);
+    fetchLocalData();
+  };
+  const handleQuantityDecrease = (item) => {
+    decreaseItemQuantity(item);
     fetchLocalData();
   };
 
@@ -206,8 +211,11 @@ const MedicinePurchase = () => {
                   </td>
                   <td className="text-center min-h-[35px] flex items-center justify-center">
                     <button
-                      // onClick={() => handleQuantityDecrease(item)}
-                      className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center"
+                      onClick={() => handleQuantityDecrease(item)}
+                      disabled={item.purchase_quantity <= 1}
+                      className={`h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center ${
+                        item.purchase_quantity <= 1 ? "cursor-not-allowed" : ""
+                      }`}
                     >
                       -
                     </button>

@@ -46,6 +46,24 @@ const increaseItemQuantity = (item) => {
     localStorage.setItem("purchase_cart", JSON.stringify(existingData));
     return true;
   }
+  //if not found return false
+  return false;
+};
+
+const decreaseItemQuantity = (item) => {
+  let existingData = JSON.parse(localStorage.getItem("purchase_cart")) || [];
+  const existingItem = existingData.find((i) => i?._id === item?._id);
+
+  if (existingItem) {
+    if (
+      existingItem?.purchase_quantity &&
+      existingItem?.purchase_quantity > 1
+    ) {
+      existingItem.purchase_quantity -= 1;
+    }
+    localStorage.setItem("purchase_cart", JSON.stringify(existingData));
+    return true;
+  }
 
   return false;
 };
@@ -55,4 +73,5 @@ export {
   updatePurchaseCart,
   removeSinglePurchaseItem,
   increaseItemQuantity,
+  decreaseItemQuantity,
 };
