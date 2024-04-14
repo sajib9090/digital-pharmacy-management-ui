@@ -1,16 +1,13 @@
 "use client";
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
+import PurchaseTable from "@/app/Components/PurchaseTable/PurchaseTable";
 import {
   cartData,
-  decreaseItemQuantity,
-  increaseItemQuantity,
-  removeSinglePurchaseItem,
   updatePurchaseCart,
 } from "@/app/localDB/localDB";
 import { useMedicineStore } from "@/app/stores/medicineStore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { RiDeleteBack2Fill } from "react-icons/ri";
 
 const MedicinePurchase = () => {
   const shopName = "rayan pharmacy";
@@ -34,21 +31,6 @@ const MedicinePurchase = () => {
     updatePurchaseCart(data, quantity);
     fetchLocalData();
     setSearchValue("");
-  };
-
-  const handleQuantityIncrease = (item) => {
-    increaseItemQuantity(item);
-    fetchLocalData();
-  };
-  const handleQuantityDecrease = (item) => {
-    decreaseItemQuantity(item);
-    fetchLocalData();
-  };
-
-  const handleRemoveItem = (item) => {
-    console.log(item);
-    removeSinglePurchaseItem(item);
-    fetchLocalData();
   };
 
   useEffect(() => {
@@ -166,79 +148,10 @@ const MedicinePurchase = () => {
 
         <>
           {localCartData?.length > 0 && (
-            <table className="w-full absolute">
-              <tr className="border-b border-r bg-blue-50 border-l rounded border-[#d0cfcf] h-[35px] w-full text-[14px]">
-                <th className="w-[4%] text-start pl-4">No.</th>
-                <th className="w-[40%] text-start pl-2">Medicine Name</th>
-                <th className="w-[22%] text-start">Group/Generic Name</th>
-                <th className="w-[18%] text-start">Company Name</th>
-                <th className="w-[11%] text-center">Quantity</th>
-                <th className="w-[5%] text-start">Action</th>
-              </tr>
-              {localCartData?.map((item, index) => (
-                <tr
-                  key={index}
-                  className={`border-b border-r border-l border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
-                >
-                  <td className="pl-4 py-2">{index + 1}.</td>
-                  <td className="pl-2">
-                    <span className="capitalize">
-                      {item?.dosage_form?.length > 6
-                        ? item?.dosage_form?.slice(0, 6) + ".."
-                        : item?.dosage_form}
-                    </span>
-                    <span className="capitalize ml-2">
-                      {item?.medicine_name?.length > 25
-                        ? item?.medicine_name?.slice(0, 25) + ".."
-                        : item?.medicine_name}
-                    </span>
-                    <span className="ml-2">
-                      {item?.strength?.length > 20
-                        ? item?.strength?.slice(0, 20) + ".."
-                        : item?.strength}
-                    </span>
-                  </td>
-                  <td>
-                    {" "}
-                    {item?.generic_name?.length > 25
-                      ? item?.generic_name?.slice(0, 25) + "..."
-                      : item?.generic_name}
-                  </td>
-                  <td>
-                    {item?.company_name?.length > 20
-                      ? item?.company_name?.slice(0, 20) + "..."
-                      : item?.company_name}
-                  </td>
-                  <td className="text-center min-h-[35px] flex items-center justify-center">
-                    <button
-                      onClick={() => handleQuantityDecrease(item)}
-                      disabled={item.purchase_quantity <= 1}
-                      className={`h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center ${
-                        item.purchase_quantity <= 1 ? "cursor-not-allowed" : ""
-                      }`}
-                    >
-                      -
-                    </button>
-                    <button className="min-w-[40px]">
-                      {item?.purchase_quantity}
-                    </button>
-                    <button
-                      onClick={() => handleQuantityIncrease(item)}
-                      className="h-[20px] w-[22px] rounded border border-gray-300 flex items-center justify-center"
-                    >
-                      +
-                    </button>
-                  </td>
-                  <td className="">
-                    <RiDeleteBack2Fill
-                      onClick={() => handleRemoveItem(item)}
-                      title="remove"
-                      className="mx-auto h-5 w-5 cursor-pointer text-black hover:text-opacity-70"
-                    ></RiDeleteBack2Fill>
-                  </td>
-                </tr>
-              ))}
-            </table>
+            <PurchaseTable
+              localCartData={localCartData}
+              fetchLocalData={fetchLocalData}
+            />
           )}
         </>
       </div>
