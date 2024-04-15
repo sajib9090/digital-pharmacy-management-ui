@@ -5,13 +5,17 @@ import {
   removeSinglePurchaseItem,
 } from "@/app/localDB/localDB";
 import React, { useEffect, useState } from "react";
+import { LuLoader2 } from "react-icons/lu";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 
 const PurchaseTable = ({ localCartData, fetchLocalData }) => {
+  const shopName = "rayan pharmacy";
   const [discountValue, setDiscountValue] = useState("");
   const [discountedAmount, setDiscountedAmount] = useState(0);
   const [taxValue, setTaxValue] = useState("");
   const [taxAmount, setTaxAmount] = useState(0);
+  const [submitAction, setSubmitAction] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const handleQuantityIncrease = (item) => {
     increaseItemQuantity(item);
@@ -52,7 +56,17 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
   };
 
   const handleSubmit = () => {
+    setSubmitLoading(true);
     console.log(localCartData, totalPrice, discountedAmount, taxAmount);
+    const data = {
+      shop_name: shopName,
+      total_price: totalPrice,
+      total_discount: discountedAmount,
+      total_tax: taxAmount,
+      items: localCartData,
+    };
+    console.log(data);
+    setSubmitLoading(false);
   };
 
   useEffect(() => {
@@ -195,14 +209,40 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
           </div>
         </div>
       </div>
-      <div className="text-end mr-4">
-        <button
-          onClick={handleSubmit}
-          className="mt-2 bg-[#03A9F5] rounded text-white h-[35px] w-[140px] hover:bg-opacity-80"
-        >
-          Submit
-        </button>
-      </div>
+      <>
+        {submitAction ? (
+          <div className="mt-2 mb-4 w-[180px] h-[40px] ml-auto">
+            <p className="text-center">Want to submit?</p>
+            <div className="flex items-center justify-between">
+              <button
+                onClick={handleSubmit}
+                className="w-[70px] h-[22px] border border-red-600 text-red-600 hover:text-white transition-all duration-500 hover:bg-red-600 rounded flex items-center justify-center"
+              >
+                {submitLoading ? (
+                  <LuLoader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Yes"
+                )}
+              </button>
+              <button
+                onClick={() => setSubmitAction(!submitAction)}
+                className="w-[70px] h-[22px] border border-blue-600 text-blue-600 hover:text-white transition-all duration-500 hover:bg-blue-600 rounded flex items-center justify-center"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-end mr-4">
+            <button
+              onClick={() => setSubmitAction(!submitAction)}
+              className="mt-2 bg-[#03A9F5] rounded text-white h-[35px] w-[140px] hover:bg-opacity-80"
+            >
+              Submit
+            </button>
+          </div>
+        )}
+      </>
     </>
   );
 };
