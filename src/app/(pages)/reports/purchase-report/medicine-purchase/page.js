@@ -1,10 +1,7 @@
 "use client";
 import PrimaryError from "@/app/Components/PrimaryError/PrimaryError";
 import PurchaseTable from "@/app/Components/PurchaseTable/PurchaseTable";
-import {
-  cartData,
-  updatePurchaseCart,
-} from "@/app/localDB/localDB";
+import { cartData, updatePurchaseCart } from "@/app/localDB/localDB";
 import { useMedicineStore } from "@/app/stores/medicineStore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -75,11 +72,11 @@ const MedicinePurchase = () => {
           />
         </div>
         {searchResultData?.length > 0 && (
-          <table className="w-full bg-white absolute z-50">
-            <tr className="border-b border-r border-l rounded border-[#d0cfcf] h-[35px] w-full text-[14px]">
-              <th className="w-[40%] text-start pl-4">Medicine Name</th>
-              <th className="w-[22%] text-start">Group/Generic Name</th>
-              <th className="w-[18%] text-start">Company Name</th>
+          <table className="w-full bg-white absolute z-50 shadow-2xl">
+            <tr className="border-b border-r border-l bg-blue-100 rounded border-[#d0cfcf] h-[35px] w-full text-[14px]">
+              <th className="w-[38%] text-start pl-4">Medicine Name</th>
+              <th className="w-[32%] text-start">Group/Generic Name</th>
+              <th className="w-[12%] text-start">Unit Price</th>
               <th className="w-[8%] text-start">Stock</th>
               <th className="w-[12%] text-start">Action</th>
             </tr>
@@ -114,11 +111,7 @@ const MedicinePurchase = () => {
                         ? m?.generic_name?.slice(0, 25) + "..."
                         : m?.generic_name}
                     </td>
-                    <td className="text-gray-500">
-                      {m?.company_name?.length > 20
-                        ? m?.company_name?.slice(0, 20) + "..."
-                        : m?.company_name}
-                    </td>
+                    <td className="text-gray-500">{m?.purchase_price}</td>
                     <td>{m?.stock_left}</td>
                     <td>
                       <form

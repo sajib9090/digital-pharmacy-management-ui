@@ -1,12 +1,18 @@
+"use client";
 import {
   decreaseItemQuantity,
   increaseItemQuantity,
   removeSinglePurchaseItem,
 } from "@/app/localDB/localDB";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 
 const PurchaseTable = ({ localCartData, fetchLocalData }) => {
+  const [discountValue, setDiscountValue] = useState("");
+  const [discountedAmount, setDiscountedAmount] = useState(0);
+  const [taxValue, setTaxValue] = useState("");
+  const [taxAmount, setTaxAmount] = useState(0);
+
   const handleQuantityIncrease = (item) => {
     increaseItemQuantity(item);
     fetchLocalData();
@@ -21,9 +27,41 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
     removeSinglePurchaseItem(item);
     fetchLocalData();
   };
+
+  const totalPrice =
+    localCartData &&
+    localCartData?.reduce((accumulator, item) => {
+      return accumulator + item?.purchase_price * item?.purchase_quantity;
+    }, 0);
+
+  const handleDiscount = (price) => {
+    if (discountValue) {
+      const totalDiscount = price * (discountValue / 100);
+      setDiscountedAmount(totalDiscount);
+    } else {
+      setDiscountedAmount(0);
+    }
+  };
+  const handleTax = (price) => {
+    if (taxValue) {
+      const totalTax = price * (taxValue / 100);
+      setTaxAmount(totalTax);
+    } else {
+      setTaxAmount(0);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(localCartData, totalPrice, discountedAmount, taxAmount);
+  };
+
+  useEffect(() => {
+    handleDiscount(totalPrice || 0);
+    handleTax(totalPrice || 0);
+  }, [totalPrice, discountValue, taxValue]);
   return (
     <>
-      <table className="w-full absolute">
+      <table className="w-full">
         <tr className="border-b border-r bg-blue-50 border-l rounded border-[#d0cfcf] h-[35px] w-full text-[14px]">
           <th className="w-[4%] text-start pl-4">No.</th>
           <th className="w-[48%] text-start pl-2">Medicine Name</th>
@@ -84,9 +122,9 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
                 item?.purchase_quantity}
             </td>
             <td className="text-end">
-              {Number(item?.purchase_quantity * item?.purchase_price)
-                .toFixed(2)
-                .toLocaleString()}
+              {Number(
+                item?.purchase_quantity * item?.purchase_price
+              ).toLocaleString()}
             </td>
             <td className="">
               <RiDeleteBack2Fill
@@ -98,6 +136,73 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
           </tr>
         ))}
       </table>
+
+      <div className="max-w-lg mt-4 ml-auto grid grid-cols-2 border-b border-gray-500">
+        <div className="w-[100%] space-y-2">
+          <div className="flex items-center justify-between">
+            <p>Total Price</p>
+            <p>:</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <p>Vat/Tax (+)</p>
+            <div className="flex items-center justify-center">
+              <input
+                value={taxValue}
+                onChange={(e) => setTaxValue(parseFloat(e.target.value))}
+                className="w-[110px] border border-gray-300 rounded pl-2 "
+                placeholder="Tax/Vat %"
+                type="number"
+                pattern="[0-9]+(\.[0-9]+)?"
+              />
+              %<p className="ml-3">:</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <p>Discount (-)</p>
+            <div className="flex items-center justify-center">
+              <input
+                value={discountValue}
+                onChange={(e) => setDiscountValue(parseFloat(e.target.value))}
+                className="w-[110px] border border-gray-300 rounded pl-2 "
+                placeholder="Discount %"
+                type="number"
+                pattern="[0-9]+(\.[0-9]+)?"
+              />
+              %<p className="ml-3">:</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between font-bold">
+            <p>Net Price</p>
+            <p>:</p>
+          </div>
+        </div>
+        <div className="w-[100%] pr-4 space-y-2">
+          <div className="flex items-center justify-end">
+            <p>{Number(totalPrice).toLocaleString()}</p>
+          </div>
+          <div className="flex items-center justify-end">
+            <p>{Number(taxAmount).toLocaleString()}</p>
+          </div>
+          <div className="flex items-center justify-end">
+            <p>{Number(discountedAmount).toLocaleString()}</p>
+          </div>
+          <div className="flex items-center justify-end font-bold">
+            <p>
+              {Number(
+                totalPrice - discountedAmount + taxAmount
+              ).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="text-end mr-4">
+        <button
+          onClick={handleSubmit}
+          className="mt-2 bg-[#03A9F5] rounded text-white h-[35px] w-[140px] hover:bg-opacity-80"
+        >
+          Submit
+        </button>
+      </div>
     </>
   );
 };
