@@ -83,7 +83,6 @@ const ListOfCompanies = () => {
                     className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
                   >
                     <td className="pl-4 py-2">
-                      {" "}
                       {i +
                         1 +
                         companies?.pagination?.currentPage * resultPerPage -

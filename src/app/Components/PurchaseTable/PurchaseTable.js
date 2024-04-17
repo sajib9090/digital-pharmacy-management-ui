@@ -64,7 +64,7 @@ const PurchaseTable = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setSubmitLoading(true);
 
     const data = {
@@ -76,26 +76,24 @@ const PurchaseTable = ({
       items: localCartData,
     };
 
-    axios
-      .post(
+    try {
+      const res = await axios.post(
         `${baseUrl}/api/v1/purchases/create/purchase?shop_name=${shopName}`,
         data
-      )
-      .then((res) => {
-        if (res) {
-          removeAllItems();
-          fetchLocalData();
-          setSubmitError(false);
-          setSubmitSuccess(res?.data?.message);
-          getAllMedicines(shopName);
-        }
-      })
-      .catch((err) => {
-        setSubmitError(err?.response?.data?.message || "Something went wrong");
-      })
-      .finally(() => {
-        setSubmitLoading(false);
-      });
+      );
+
+      if (res) {
+        removeAllItems();
+        await fetchLocalData();
+        setSubmitError(false);
+        setSubmitSuccess(res?.data?.message);
+        await getAllMedicines(shopName);
+      }
+    } catch (err) {
+      setSubmitError(err?.response?.data?.message || "Something went wrong");
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
   useEffect(() => {

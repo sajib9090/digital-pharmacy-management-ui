@@ -183,7 +183,12 @@ const ListOfMedicines = () => {
                     key={medicine?._id}
                     className={`border-b border-[#ebebeb] min-h-[35px] w-full text-[14px]`}
                   >
-                    <td className="pl-4 py-2">{i + 1}</td>
+                    <td className="pl-4 py-2">
+                      {i +
+                        1 +
+                        medicines?.pagination?.currentPage * resultPerPage -
+                        resultPerPage}
+                    </td>
                     <td className="capitalize">
                       <span className="mr-2 text-gray-500">
                         {medicine?.dosage_form?.length > 6
