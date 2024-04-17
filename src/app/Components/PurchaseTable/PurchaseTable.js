@@ -2,13 +2,22 @@
 import {
   decreaseItemQuantity,
   increaseItemQuantity,
+  removeAllItems,
   removeSinglePurchaseItem,
 } from "@/app/localDB/localDB";
+import { baseUrl } from "@/secrets";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { LuLoader2 } from "react-icons/lu";
 import { RiDeleteBack2Fill } from "react-icons/ri";
 
-const PurchaseTable = ({ localCartData, fetchLocalData }) => {
+const PurchaseTable = ({
+  localCartData,
+  fetchLocalData,
+  setSubmitError,
+  setSubmitSuccess,
+  getAllMedicines,
+}) => {
   const shopName = "rayan pharmacy";
   const [discountValue, setDiscountValue] = useState("");
   const [discountedAmount, setDiscountedAmount] = useState(0);
@@ -57,16 +66,36 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
 
   const handleSubmit = () => {
     setSubmitLoading(true);
-    console.log(localCartData, totalPrice, discountedAmount, taxAmount);
+
     const data = {
       shop_name: shopName,
+      category: "medicine",
       total_price: totalPrice,
       total_discount: discountedAmount,
       total_tax: taxAmount,
       items: localCartData,
     };
-    console.log(data);
-    setSubmitLoading(false);
+
+    axios
+      .post(
+        `${baseUrl}/api/v1/purchases/create/purchase?shop_name=${shopName}`,
+        data
+      )
+      .then((res) => {
+        if (res) {
+          removeAllItems();
+          fetchLocalData();
+          setSubmitError(false);
+          setSubmitSuccess(res?.data?.message);
+          getAllMedicines(shopName);
+        }
+      })
+      .catch((err) => {
+        setSubmitError(err?.response?.data?.message || "Something went wrong");
+      })
+      .finally(() => {
+        setSubmitLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -216,6 +245,7 @@ const PurchaseTable = ({ localCartData, fetchLocalData }) => {
             <div className="flex items-center justify-between">
               <button
                 onClick={handleSubmit}
+                disabled={submitLoading}
                 className="w-[70px] h-[22px] border border-red-600 text-red-600 hover:text-white transition-all duration-500 hover:bg-red-600 rounded flex items-center justify-center"
               >
                 {submitLoading ? (

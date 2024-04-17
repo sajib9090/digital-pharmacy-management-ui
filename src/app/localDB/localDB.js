@@ -68,10 +68,15 @@ const decreaseItemQuantity = (item) => {
   return false;
 };
 
+const removeAllItems = () => {
+  localStorage.setItem("purchase_cart", JSON.stringify([]));
+};
+
 export {
   cartData,
   updatePurchaseCart,
   removeSinglePurchaseItem,
   increaseItemQuantity,
   decreaseItemQuantity,
+  removeAllItems,
 };
