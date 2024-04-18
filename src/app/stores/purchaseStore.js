@@ -8,7 +8,6 @@ export const usePurchaseStore = create((set) => ({
   purchaseError: "",
   getAllPurchases: async (
     shopName,
-    companyValue = "",
     page = "",
     limit = "",
     priceValue = "",
@@ -21,7 +20,7 @@ export const usePurchaseStore = create((set) => ({
       set({ purchaseLoading: true, purchaseError: "" });
 
       const response = await axios.get(
-        `${baseUrl}/api/v1/purchases/get-all?shop_name=${shopName}&company_name=${companyValue}&page=${page}&limit=${limit}&price=${priceValue}&category=${category}&startDate=${startDate}&endDate=${endDate}&search=${searchValue}`
+        `${baseUrl}/api/v1/purchases/get-all?shop_name=${shopName}&page=${page}&limit=${limit}&price=${priceValue}&category=${category}&startDate=${startDate}&endDate=${endDate}&search=${searchValue}`
       );
 
       const { data } = response;

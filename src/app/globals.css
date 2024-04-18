@@ -42,3 +42,7 @@
   cursor: inherit;
   line-height: inherit;
 }
+
+.date input[type="date"] {
+  color: rgb(155, 153, 153);
+}
